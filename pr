@@ -1,36 +1,28 @@
-Practical: Design a simple network for SDN using Mininet
-Aim:To design and test a simple Software Defined Network (SDN) using Mininet in Ubuntu.
+*Write a program to implement states of React Hooks.*
 
-Software Defined Networking (SDN) separates the control plane (controller) and the data plane (switches).
-It allows flexible and programmable network control.
-Mininet is a lightweight emulator used to create virtual SDN networks on a single system.
-It supports creation of hosts, switches, links, and controllers virtually.
+import React, { useState } from "react";
 
-Procedure:
-1.Open terminal in Ubuntu.
+function App() {
+  const [count, setCount] = useState(0);
 
-2.Run the command to create a simple topology:
-sudo mn --topo single,2
-→ This creates 1 switch (s1) connected to 2 hosts (h1, h2).
+  return (
+    <div>
+      <h1>Count: {count}</h1>
 
-3.Check connected devices using:
-nodes
+      <button onClick={() => setCount(count + 1)}>
+        Increase
+      </button>
 
-4.Test connectivity between all hosts using:
-pingall
+      <button onClick={() => setCount(count - 1)}>
+        Decrease
+      </button>
+    </div>
+  );
+}
 
-5.Verify that all hosts can communicate successfully.
+export default App;
 
-6.Exit Mininet by typing:
-exit
 
- Output:
-Network successfully created with 1 switch and 2 hosts.
-Output shows:
-*** Results: 0% dropped (2/2 received)
-→ This means both hosts communicated successfully with no packet loss.
+Output:
 
-Result:
-A simple SDN network was designed and tested successfully using Mininet.
-The network allowed communication between two hosts through a single switch.
-Hence, the practical was performed successfully
+Count value increases or decreases when buttons are clicked.
