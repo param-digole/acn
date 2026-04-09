@@ -1,28 +1,210 @@
-*Write a program to implement states of React Hooks.*
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-import React, { useState } from "react";
+    <!-- Username -->
+    <EditText
+        android:id="@+id/username"
+        android:hint="Enter Username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
-function App() {
-  const [count, setCount] = useState(0);
+    <!-- Password -->
+    <EditText
+        android:id="@+id/password"
+        android:hint="Enter Password"
+        android:inputType="textPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
-  return (
-    <div>
-      <h1>Count: {count}</h1>
+    <!-- Gender -->
+    <TextView
+        android:text="Select Gender"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
-      <button onClick={() => setCount(count + 1)}>
-        Increase
-      </button>
+    <RadioGroup
+        android:id="@+id/genderGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-      <button onClick={() => setCount(count - 1)}>
-        Decrease
-      </button>
-    </div>
-  );
+        <RadioButton
+            android:id="@+id/male"
+            android:text="Male"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <RadioButton
+            android:id="@+id/female"
+            android:text="Female"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RadioGroup>
+
+    <!-- Remember Me -->
+    <CheckBox
+        android:id="@+id/remember"
+        android:text="Remember Me"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <!-- Login Button -->
+    <Button
+        android:id="@+id/loginBtn"
+        android:text="Login"
+        android:enabled="false"
+        android:layout_marginTop="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <!-- Progress Bar -->
+    <ProgressBar
+        android:id="@+id/progress"
+        android:visibility="gone"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
+
+
+
+
+
+
+
+package com.example.finalpr;
+
+import android.os.Bundle;
+import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.*;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText username, password;
+    RadioGroup genderGroup;
+    CheckBox remember;
+    Button loginBtn;
+    ProgressBar progress;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        username = findViewById(R.id.username);
+        password = findViewById(R.id.password);
+        genderGroup = findViewById(R.id.genderGroup);
+        remember = findViewById(R.id.remember);
+        loginBtn = findViewById(R.id.loginBtn);
+        progress = findViewById(R.id.progress);
+
+        // Enable button only when fields filled
+        TextWatcher watcher = new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                loginBtn.setEnabled(!username.getText().toString().isEmpty() &&
+                        !password.getText().toString().isEmpty());
+            }
+            public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
+            public void onTextChanged(CharSequence s, int a, int b, int c) {}
+        };
+
+        username.addTextChangedListener(watcher);
+        password.addTextChangedListener(watcher);
+
+        loginBtn.setOnClickListener(v -> {
+
+            // Gender
+            int id = genderGroup.getCheckedRadioButtonId();
+            RadioButton selected = findViewById(id);
+            String gender = (selected != null) ? selected.getText().toString() : "Not selected";
+
+            // Progress bar show
+            progress.setVisibility(ProgressBar.VISIBLE);
+
+            new Handler().postDelayed(() -> {
+
+                progress.setVisibility(ProgressBar.GONE);
+
+                // Remember Me toast
+                if (remember.isChecked()) {
+                    Toast.makeText(this, "Login Successful (" + gender + ") - Remembered", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, "Login Successful (" + gender + ")", Toast.LENGTH_LONG).show();
+                }
+
+            }, 2000); // 2 sec delay
+
+        });
+    }
 }
 
-export default App;
 
 
-Output:
 
-Count value increases or decreases when buttons are clicked.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+✍️ Q1. Write a code snippet to listen for Airplane Mode state changes.
+
+Answer:
+
+Airplane mode state changes can be detected using a BroadcastReceiver.
+
+BroadcastReceiver receiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+
+        boolean state = intent.getBooleanExtra("state", false);
+
+        if(state)
+            System.out.println("Airplane Mode ON");
+        else
+            System.out.println("Airplane Mode OFF");
+    }
+};
+
+// Register receiver
+IntentFilter filter = new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+registerReceiver(receiver, filter);
+
+
+✍️ Q2. How do you change the phone to Silent Mode programmatically?
+
+Answer:
+
+Silent mode can be enabled using AudioManager class.
+
+AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+
+Permission required:
+
+<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
