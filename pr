@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
             // Gender
             int id = genderGroup.getCheckedRadioButtonId();
             RadioButton selected = findViewById(id);
-            String gender = (selected != null) ? selected.getText().toString() : "Not selected";
+            String gender = (selected != null) ? selected.getText().toString() : "Gender Not selected";
 
             // Progress bar show
             progress.setVisibility(ProgressBar.VISIBLE);
